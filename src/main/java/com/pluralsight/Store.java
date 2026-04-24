@@ -1,6 +1,8 @@
 
 package com.pluralsight;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -58,6 +60,21 @@ public class Store {
     public static void loadInventory(String fileName, ArrayList<Product> inventory) {
         // TODO: read each line, split on "|",
         //       create a Product object, and add it to the inventory list
+        String line;
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(fileName));
+            while ((line = bufferedReader.readLine()) != null) {
+                String[] parts = line.split("\\|");
+                String id = parts[0];
+                String name = parts[1];
+                double price = Double.parseDouble(parts[2]);
+                inventory.add(new Product(id, name, price));
+            }
+            bufferedReader.close();
+
+        } catch (Exception e){
+            System.err.println("Something went wrong. Please try again!");
+        }
     }
 
     /**
@@ -69,6 +86,27 @@ public class Store {
                                        Scanner scanner) {
         // TODO: show each product (id, name, price),
         //       prompt for an id, find that product, add to cart
+        System.out.println("All available Products: ");
+        for (Product product : inventory) {
+            System.out.println("ID: " + product.getId() + " | Name: " + product.getName() + " | Price: " + product.getPrice()); // Prints out all available products
+        }
+
+        System.out.println("Enter Product Id to add to cart(X to exit): "); // Asks user for product id to add to cart or if they want to exit this screen
+        String userInput = scanner.nextLine();
+
+        if (userInput.equalsIgnoreCase("X")){ // If the user clicks "X" then they will be brought back to the home screen
+            return;
+        }
+
+        Product foundProduct = findProductById(userInput, inventory);
+        if (foundProduct == null) {
+            System.out.println("Sorry the id doesn't exist.");
+        } else {
+            cart.add(foundProduct);
+            System.out.println("Added " + foundProduct.getName() + " to cart!");
+        }
+
+
     }
 
     /**
@@ -103,6 +141,12 @@ public class Store {
      */
     public static Product findProductById(String id, ArrayList<Product> inventory) {
         // TODO: loop over the list and compare ids
+        for (Product product : inventory) {
+            if (product.getId().equalsIgnoreCase(id)) {
+                return product;
+            }
+        }
+
         return null;
     }
 }
