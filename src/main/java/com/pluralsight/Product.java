@@ -36,4 +36,9 @@ public class Product {
 
 
     }
+
+    @Override
+    public String toString() {
+        return "ID: " + getId() + " | Name: " + getName() + " | Price: $" +  String.format("%.2f", getPrice());
+    }
 }

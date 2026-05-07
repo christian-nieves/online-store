@@ -18,7 +18,7 @@ public class Store {
         ArrayList<Product> inventory = new ArrayList<>();
         ArrayList<Product> cart = new ArrayList<>();
 
-        // Load inventory from the data file (pipe-delimited: id|name|price)
+        // Load inventory from the data file
         loadInventory("products.csv", inventory);
 
         // Main menu loop
@@ -88,7 +88,7 @@ public class Store {
         //       prompt for an id, find that product, add to cart
         System.out.println("All available Products: ");
         for (Product product : inventory) {
-            System.out.println("ID: " + product.getId() + " | Name: " + product.getName() + " | Price: " + product.getPrice()); // Prints out all available products
+            System.out.println(product); // Prints out all available products
         }
 
         System.out.println("Enter Product Id to add to cart(X to exit): "); // Asks user for product id to add to cart or if they want to exit this screen
@@ -127,10 +127,10 @@ public class Store {
             return;
         } else {
             for (Product product : cart) {
-                System.out.println("ID: " + product.getId() + " | Name: " + product.getName() + " | Price: " + product.getPrice()); // Prints out all products in cart
+                System.out.println(product); // Prints out all products in cart
                 totalPrice += product.getPrice();
             }
-            System.out.println("Total Price: " + totalPrice);
+            System.out.printf("Total Price: $%.2f%n", totalPrice);
 
             System.out.println("Check Out(C) or Exit(X): "); // Asks user for product id to add to cart or if they want to exit this screen
             String userInput = scanner.nextLine();
@@ -163,7 +163,7 @@ public class Store {
         String userInput = scanner.nextLine();
 
         if (userInput.equalsIgnoreCase("Y")){
-            System.out.println("Total Amount Due: $" + totalAmount);
+            System.out.println("Total Amount Due: $" + String.format("%.2f", totalAmount));
             System.out.println("Enter Payment Amount: ");
             double paymentAmount = scanner.nextDouble();
             scanner.nextLine();
@@ -171,14 +171,21 @@ public class Store {
             if (paymentAmount >= totalAmount) {
                 System.out.println("Payment Successful!");
                 double changeDue = paymentAmount - totalAmount;
-                System.out.println(" ");
-                System.out.println("Receipt: ");
-                System.out.println("---------------------------");
-                for (Product product : cart) {
-                    System.out.println("ID: " + product.getId() + " | Name: " + product.getName() + " | Price: " + product.getPrice()); // Prints out all products in cart
-                }
-                System.out.println("Change Due: $" + changeDue);
 
+                System.out.println("\n===================== RECEIPT =======================");
+                System.out.printf("%-8s %-35s %8s%n", "ID", "Name", "Price");
+                System.out.println("-----------------------------------------------------");
+                for (Product product : cart) {
+                    System.out.printf("%-8s %-35s $%7.2f%n",
+                            product.getId(), product.getName(), product.getPrice());
+                }
+                System.out.println("-----------------------------------------------------");
+                System.out.printf("%-44s $%7.2f%n", "TOTAL:", totalAmount);
+                System.out.printf("%-44s $%7.2f%n", "PAID:", paymentAmount);
+                System.out.printf("%-44s $%7.2f%n", "CHANGE DUE:", changeDue);
+                System.out.println("-----------------------------------------------------");
+                System.out.println("           Thank you for your purchase!              ");
+                System.out.println("=====================================================\n");
                 cart.clear();
 
                 return;
