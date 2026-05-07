@@ -119,7 +119,28 @@ public class Store {
         //   • compute the total cost
         //   • ask the user whether to check out (C) or return (X)
         //   • if C, call checkOut(cart, totalAmount, scanner)
+
+        double totalPrice = 0;
+        System.out.println("Cart: ");
+        for (Product product : cart) {
+            System.out.println("ID: " + product.getId() + " | Name: " + product.getName() + " | Price: " + product.getPrice()); // Prints out all products in cart
+            totalPrice += product.getPrice();
+        }
+        System.out.println("Total Price: " + totalPrice);
+
+        System.out.println("Check Out(C) or Exit(X): "); // Asks user for product id to add to cart or if they want to exit this screen
+        String userInput = scanner.nextLine();
+
+        if (userInput.equalsIgnoreCase("C")){
+            checkOut(cart, totalPrice, scanner);
+        }
+
+        if (userInput.equalsIgnoreCase("X")){ // If the user clicks "X" then they will exit the cart
+            return;
+        }
+
     }
+
 
     /**
      * Handles the checkout process:
@@ -132,6 +153,27 @@ public class Store {
                                 double totalAmount,
                                 Scanner scanner) {
         // TODO: implement steps listed above
+
+        System.out.println("Press 'Y' if you want to check out all items in your cart(X to exit): ");
+        String userInput = scanner.nextLine();
+
+        if (userInput.equalsIgnoreCase("Y")){
+            System.out.println("Total Amount Due: " + totalAmount);
+            System.out.println("Enter Payment Amount: ");
+            double paymentAmount = scanner.nextDouble();
+            scanner.nextLine();
+
+            if (paymentAmount > totalAmount) {
+                System.out.println("Payment Successful!");
+                double changeDue = paymentAmount - totalAmount;
+                System.out.println("Change Due: " + changeDue);
+                System.out.println(" ");
+                System.out.println("Receipt");
+
+            }
+        }
+
+
     }
 
     /**
