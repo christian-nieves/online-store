@@ -122,21 +122,26 @@ public class Store {
 
         double totalPrice = 0;
         System.out.println("Cart: ");
-        for (Product product : cart) {
-            System.out.println("ID: " + product.getId() + " | Name: " + product.getName() + " | Price: " + product.getPrice()); // Prints out all products in cart
-            totalPrice += product.getPrice();
-        }
-        System.out.println("Total Price: " + totalPrice);
-
-        System.out.println("Check Out(C) or Exit(X): "); // Asks user for product id to add to cart or if they want to exit this screen
-        String userInput = scanner.nextLine();
-
-        if (userInput.equalsIgnoreCase("C")){
-            checkOut(cart, totalPrice, scanner);
-        }
-
-        if (userInput.equalsIgnoreCase("X")){ // If the user clicks "X" then they will exit the cart
+        if (cart.isEmpty()) {
+            System.out.println("Your cart is empty.");
             return;
+        } else {
+            for (Product product : cart) {
+                System.out.println("ID: " + product.getId() + " | Name: " + product.getName() + " | Price: " + product.getPrice()); // Prints out all products in cart
+                totalPrice += product.getPrice();
+            }
+            System.out.println("Total Price: " + totalPrice);
+
+            System.out.println("Check Out(C) or Exit(X): "); // Asks user for product id to add to cart or if they want to exit this screen
+            String userInput = scanner.nextLine();
+
+            if (userInput.equalsIgnoreCase("C")) {
+                checkOut(cart, totalPrice, scanner);
+            }
+
+            if (userInput.equalsIgnoreCase("X")) { // If the user clicks "X" then they will exit the cart
+                return;
+            }
         }
 
     }
@@ -158,19 +163,32 @@ public class Store {
         String userInput = scanner.nextLine();
 
         if (userInput.equalsIgnoreCase("Y")){
-            System.out.println("Total Amount Due: " + totalAmount);
+            System.out.println("Total Amount Due: $" + totalAmount);
             System.out.println("Enter Payment Amount: ");
             double paymentAmount = scanner.nextDouble();
             scanner.nextLine();
 
-            if (paymentAmount > totalAmount) {
+            if (paymentAmount >= totalAmount) {
                 System.out.println("Payment Successful!");
                 double changeDue = paymentAmount - totalAmount;
-                System.out.println("Change Due: " + changeDue);
                 System.out.println(" ");
-                System.out.println("Receipt");
+                System.out.println("Receipt: ");
+                System.out.println("---------------------------");
+                for (Product product : cart) {
+                    System.out.println("ID: " + product.getId() + " | Name: " + product.getName() + " | Price: " + product.getPrice()); // Prints out all products in cart
+                }
+                System.out.println("Change Due: $" + changeDue);
 
+                cart.clear();
+
+                return;
+            } else {
+                System.out.println("Insufficient Amount. Please enter at least $" + totalAmount);
             }
+        }
+
+        if (userInput.equalsIgnoreCase("X")) { // If the user clicks "X" then they will exit the cart
+            return;
         }
 
 
