@@ -5,7 +5,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.PrintWriter;
 import java.time.LocalDateTime;
-import java.time.chrono.ChronoLocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -182,6 +181,8 @@ public class Store {
                     writer.close();
 
                     System.out.println("Your receipt has been emailed to you!");
+
+                    System.exit(0); // Closes application after purchase is complete and emailed to you.
 
                 } catch (Exception e) {
                     System.err.println("Something went wrong emailing you the receipt. Please try again.");
