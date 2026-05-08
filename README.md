@@ -2,7 +2,7 @@
 
 ## Description of the Project
 
-Briefly describe what this Java console application does. Mention its purpose and who the intended users are. Explain the main functionality and what problems it aims to solve.
+This is an Online Store that users can shop at and purchase new items!  The store provides multiple options for users to decide from when they first open the application. The can view all products, add products to a cart, show cart, remove products from a cart, check out cart, and pay with cash. 
 
 ## User Stories
 
@@ -32,8 +32,7 @@ Follow these steps to get your application running within IntelliJ IDEA:
 
 ## Technologies Used
 
-- Java: Mention the version you are using.
-- Any additional libraries or frameworks used in the project.
+- Java Amazon Corretto 17.0.18
 
 ## Demo
 
@@ -45,25 +44,24 @@ Include screenshots or GIFs that show your application in action. Use tools like
 
 Outline potential future enhancements or functionalities you might consider adding:
 
-- Additional feature to be developed.
-- Improvement of current functionalities.
+- Add a feature that leaves the user at the inventory even after they add something to the cart
+- Add colors to receipt
+- Add quantity feature if item is added more than once
 
 ## Resources
 
 List resources such as tutorials, articles, or documentation that helped you during the project.
 
-- [Java Programming Tutorial](https://www.example.com)
-- [Effective Java](https://www.example.com)
+- https://raymaroun.github.io/yearup-java-visuals/
 
 ## Team Members
 
-- **Name 1** - Specific contributions or roles.
-- **Name 2** - Specific contributions or roles.
+- **Developer** - Christian Nieves.
 
 ## Thanks
 
 Express gratitude towards those who provided help, guidance, or resources:
 
-- Thank you to [Mentor's Name] for continuous support and guidance.
-- A special thanks to all teammates for their dedication and teamwork.
+- Thank you to Raymond Maroun for continuous support and guidance.
+- A special thanks to all of my classmates for always being there whenever I need help.
  

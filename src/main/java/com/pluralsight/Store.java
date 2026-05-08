@@ -3,13 +3,13 @@ package com.pluralsight;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.PrintWriter;
+import java.time.LocalDateTime;
+import java.time.chrono.ChronoLocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-/**
- * Starter code for the Online Store workshop.
- * Students will complete the TODO sections to make the program work.
- */
 public class Store {
 
     public static void main(String[] args) {
@@ -49,17 +49,8 @@ public class Store {
         scanner.close();
     }
 
-    /**
-     * Reads product data from a file and populates the inventory list.
-     * File format (pipe-delimited):
-     * id|name|price
-     * <p>
-     * Example line:
-     * A17|Wireless Mouse|19.99
-     */
+    // load inventory method that creates products and adds it to the inventory list
     public static void loadInventory(String fileName, ArrayList<Product> inventory) {
-        // TODO: read each line, split on "|",
-        //       create a Product object, and add it to the inventory list
         String line;
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(fileName));
@@ -77,15 +68,11 @@ public class Store {
         }
     }
 
-    /**
-     * Displays all products and lets the user add one to the cart.
-     * Typing X returns to the main menu.
-     */
+    // display products that shows the user all of the products
     public static void displayProducts(ArrayList<Product> inventory,
                                        ArrayList<Product> cart,
                                        Scanner scanner) {
-        // TODO: show each product (id, name, price),
-        //       prompt for an id, find that product, add to cart
+
         System.out.println("All available Products: ");
         for (Product product : inventory) {
             System.out.println(product); // Prints out all available products
@@ -109,16 +96,7 @@ public class Store {
 
     }
 
-    /**
-     * Shows the contents of the cart, calculates the total,
-     * and offers the option to check out.
-     */
     public static void displayCart(ArrayList<Product> cart, Scanner scanner) {
-        // TODO:
-        //   • list each product in the cart
-        //   • compute the total cost
-        //   • ask the user whether to check out (C) or return (X)
-        //   • if C, call checkOut(cart, totalAmount, scanner)
 
         double totalPrice = 0;
         System.out.println("Cart: ");
@@ -132,11 +110,15 @@ public class Store {
             }
             System.out.printf("Total Price: $%.2f%n", totalPrice);
 
-            System.out.println("Check Out(C) or Exit(X): "); // Asks user for product id to add to cart or if they want to exit this screen
+            System.out.println("Check Out(C) | Remove(R) | Exit(X): "); // Asks user for product id to add to cart or if they want to exit this screen
             String userInput = scanner.nextLine();
 
             if (userInput.equalsIgnoreCase("C")) {
                 checkOut(cart, totalPrice, scanner);
+            }
+
+            if (userInput.equalsIgnoreCase("R")){
+                removeItem(cart, totalPrice, scanner);
             }
 
             if (userInput.equalsIgnoreCase("X")) { // If the user clicks "X" then they will exit the cart
@@ -146,18 +128,9 @@ public class Store {
 
     }
 
-
-    /**
-     * Handles the checkout process:
-     * 1. Confirm that the user wants to buy.
-     * 2. Accept payment and calculate change.
-     * 3. Display a simple receipt.
-     * 4. Clear the cart.
-     */
     public static void checkOut(ArrayList<Product> cart,
                                 double totalAmount,
                                 Scanner scanner) {
-        // TODO: implement steps listed above
 
         System.out.println("Press 'Y' if you want to check out all items in your cart(X to exit): ");
         String userInput = scanner.nextLine();
@@ -186,6 +159,34 @@ public class Store {
                 System.out.println("-----------------------------------------------------");
                 System.out.println("           Thank you for your purchase!              ");
                 System.out.println("=====================================================\n");
+
+                // writes and saves receipt to a new file in receipts folder
+                try {
+                    String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmm"));
+                    PrintWriter writer = new PrintWriter("Receipts/" + timestamp + ".txt");
+
+                    writer.println("\n===================== RECEIPT =======================");
+                    writer.printf("%-8s %-35s %8s%n", "ID", "Name", "Price");
+                    writer.println("-----------------------------------------------------");
+                    for (Product product : cart) {
+                        writer.printf("%-8s %-35s $%7.2f%n",
+                                product.getId(), product.getName(), product.getPrice());
+                    }
+                    writer.println("-----------------------------------------------------");
+                    writer.printf("%-44s $%7.2f%n", "TOTAL:", totalAmount);
+                    writer.printf("%-44s $%7.2f%n", "PAID:", paymentAmount);
+                    writer.printf("%-44s $%7.2f%n", "CHANGE DUE:", changeDue);
+                    writer.println("-----------------------------------------------------");
+                    writer.println("           Thank you for your purchase!              ");
+                    writer.println("=====================================================\n");
+                    writer.close();
+
+                    System.out.println("Your receipt has been emailed to you!");
+
+                } catch (Exception e) {
+                    System.err.println("Something went wrong emailing you the receipt. Please try again.");
+                }
+
                 cart.clear();
 
                 return;
@@ -201,13 +202,23 @@ public class Store {
 
     }
 
-    /**
-     * Searches a list for a product by its id.
-     *
-     * @return the matching Product, or null if not found
-     */
+    // remove item method that gives the user the option to remove an item from the cart
+    public static void removeItem(ArrayList<Product> cart, double totalAmount,
+                                  Scanner scanner) {
+        System.out.println("Enter Product Id to add to cart(X to exit): ");
+        String userInput = scanner.nextLine();
+
+        Product foundProduct = findProductById(userInput, cart);
+        if (foundProduct.equals(foundProduct.getId())) {
+            System.out.println("This item does not exist or isn't in the cart.");
+        } else {
+            cart.remove(foundProduct);
+            System.out.println("Removed " + foundProduct.getName() + " from the cart.");
+        }
+
+    }
+
     public static Product findProductById(String id, ArrayList<Product> inventory) {
-        // TODO: loop over the list and compare ids
         for (Product product : inventory) {
             if (product.getId().equalsIgnoreCase(id)) {
                 return product;
