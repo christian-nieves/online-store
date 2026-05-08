@@ -182,13 +182,12 @@ public class Store {
 
                     System.out.println("Your receipt has been emailed to you!");
 
-                    System.exit(0); // Closes application after purchase is complete and emailed to you.
 
                 } catch (Exception e) {
                     System.err.println("Something went wrong emailing you the receipt. Please try again.");
                 }
 
-                cart.clear();
+                cart.clear(); // clears cart after payment is complete
 
                 return;
             } else {
